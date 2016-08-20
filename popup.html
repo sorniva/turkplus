@@ -1,0 +1,226 @@
+<!doctype html>
+<html style="width: 800px; height: 500px; overflow-x: hidden; background-color: #333; color: #FFF;">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="A basic template for a Chrome Extension using Twitter Bootstrap 3">
+  <meta name="author" content="Elliot Hesp">
+
+  <title>Turk Plus</title>
+
+  <!-- Scripts -->
+  <script src="js/jquery-3.1.0.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="popup.js"></script>
+
+  <!-- Cascading Style Sheets -->
+  <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+  <link href="css/dashboard.css" rel="stylesheet" media="screen">
+</head>
+
+<body style="background-color: #333; color: #FFF;">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Turk+</a>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-2 sidebar" style="background-color: #222;">
+        <ul class="nav nav-sidebar">
+          <li>General</li>
+          <li class="dashboard active"><a href="#">Dashboard</a>
+          </li>
+        </ul>
+        <ul class="nav nav-sidebar">
+          <li>Today's HITs</li>
+          <li class="all"> <a href="#">All      </a>
+          </li>
+          <li class="breakdown"><a href="#">Breakdown</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="navi navi-dashboard col-xs-10 col-xs-offset-2 main" style="font-size: 12px;">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="thumbnail">
+              <!-- Total Earnings -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Earnings To Date</th>
+                    <th style="width: 50px; text-align: center;">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Approved HITs</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                  </tr>
+                  <tr>
+                    <td>Bonuses</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                  </tr>
+                  <tr>
+                    <td>Total</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                  </tr>
+                  <tr>
+                    <td>Available for Transfer</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- Total Earnings -->
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="thumbnail">
+              <!-- HIT Totals -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Submitted</th>
+                    <th style="width: 50px; text-align: center;">Value</th>
+                    <th style="width: 50px; text-align: center;">Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Total</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td style="width: 50px; text-align: right;">—</td>
+                  </tr>
+                  <tr>
+                    <td>Approved</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                  </tr>
+                  <tr>
+                    <td>Rejected</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                  </tr>
+                  <tr>
+                    <td>Pending </td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td style="width: 50px; text-align: right;">—</td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- HIT Totals -->
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="thumbnail">
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th style="width: 50px; text-align: center;">Submitted</th>
+                    <th style="width: 50px; text-align: center;">Approved</th>
+                    <th style="width: 50px; text-align: center;">Rejected</th>
+                    <th style="width: 50px; text-align: center;">Pending</th>
+                    <th style="width: 50px; text-align: center;">Eanrings</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="dash">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                  </tr>
+                  <tr>
+                    <td class="dash">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                  </tr>
+                  <tr>
+                    <td class="dash">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                  </tr>
+                  <tr>
+                    <td class="dash">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                  </tr>
+                  <tr>
+                    <td class="dash">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">-</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                    <td class="dash" style="width: 50px; text-align: right;">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="navi navi-all col-xs-10 col-xs-offset-2 main hidden" style="font-size: 12px;">
+        <div class="row">
+          <div class="col-xs-6">
+            <h3 class="page-header">Today's HITs - All</h3>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-primary btn-xs pull-right sync-todays">Sync</button>
+          </div>
+        </div>
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>Requester</th>
+              <th>Title</th>
+              <th>Reward</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="all">
+        </table>
+      </div>
+
+      <div class="navi navi-breakdown col-xs-10 col-xs-offset-2 main hidden" style="font-size: 12px;">
+        <div class="row">
+          <div class="col-xs-6">
+            <h3 class="page-header">Today's HITs - Breakdown</h3>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-primary btn-xs pull-right sync-todays">Sync</button>
+          </div>
+        </div>
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>Requester</th>
+              <th style="width: 50px; text-align: right;">HITs</th>
+              <th style="width: 50px; text-align: right;">Reward</th>
+            </tr>
+          </thead>
+          <tbody id="breakdown">
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

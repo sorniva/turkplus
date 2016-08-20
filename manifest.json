@@ -1,0 +1,66 @@
+{
+    "manifest_version": 2,
+
+    "name": "Turk+",
+    "description": "This extension adds many useful things to help you turk better.",
+    "version": "0.1.1",
+
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html" 
+    },
+
+    "background": {
+        "scripts": ["jquery-3.1.0.js", "background.js"],
+        "persistent": true
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["https://www.mturk.com/mturk/dashboard"],
+            "js": ["jquery-3.1.0.js", "$dashboard.js"]
+        },
+        {
+            "matches": ["https://www.mturk.com/*"],
+            "js": ["jquery-3.1.0.js", "$global.js"]
+        },
+        {
+            "matches": [
+                "https://www.mturk.com/mturk/preview*",
+                "https://www.mturk.com/mturk/accept*",
+                "https://www.mturk.com/mturk/continue*",
+                "https://www.mturk.com/mturk/submit*",
+                "https://www.mturk.com/mturk/return*"
+            ],
+            "js": [
+                "sendhit.js"
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "matches": [
+                "https://www.mturk.com/mturk/preview*",
+                "https://www.mturk.com/mturk/accept*",
+                "https://www.mturk.com/mturk/continue*",
+                "https://www.mturk.com/mturk/submit*",
+                "https://www.mturk.com/mturk/return*"
+            ],
+            "js": [
+                "capsuleinfo.js"
+            ],
+            "run_at": "document_start"
+        }
+    ],
+
+    "web_accessible_resources": [
+        "media/*"
+    ],
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "storage",
+        "webRequest",
+        "<all_urls>"
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
