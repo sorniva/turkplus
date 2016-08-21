@@ -56,6 +56,7 @@ var worst_case_scenario =
 	(Math.round(hits_approved / (hits_approved + hits_rejected + hits_pending) * 1000000)/10000).toFixed(4) + '%'
 ;
 
+/*
 var dash_popup = {
     earnings_hits     : $('#approved_hits_earnings_amount') .text(),
     earnings_bonus    : $('#bonus_earnings_amount')         .text(),
@@ -67,6 +68,31 @@ var dash_popup = {
     hits_pending      : $('td.metrics-table-first-value:contains(... Pending)')    .next() .text(),
     hits_approved_per : $('td.metrics-table-first-value:contains(... Approved)')   .next() .next() .text(),
     hits_rejected_per : $('td.metrics-table-first-value:contains(... Rejected)')   .next() .next() .text()  
+}
+*/
+var aa = 4, bb = 5, $elem = $('a[href^="/mturk/statusdetail?encodedDate"]').parents('tr');
+
+var dash_popup = {
+  // Total Earnings
+  0 : $('#approved_hits_earnings_amount').text(),
+  1 : $('#bonus_earnings_amount'        ).text(),
+  2 : $('#total_earnings_amount'        ).text(),
+  3 : $('#transfer_earnings'            ).text(),
+          
+  // HIT Totals
+  4 : $('td.metrics-table-first-value:contains(HITs Submitted)').next().text(),
+  5 : $('td.metrics-table-first-value:contains(... Approved)'  ).next().text(),
+  6 : $('td.metrics-table-first-value:contains(... Rejected)'  ).next().text(),
+  9 : $('td.metrics-table-first-value:contains(... Pending)'   ).next().text(),
+  7 : $('td.metrics-table-first-value:contains(... Approved)'  ).next().next().text(),
+  8 : $('td.metrics-table-first-value:contains(... Rejected)'  ).next().next().text(),
+};
+      
+// HIT Status
+for (var i = 10; i < ($elem.length * 5) + 10; i ++) { 
+  var cc = ++ bb % 6;
+  dash_popup[i] = $elem.eq(aa).children().eq(cc).text().trim();
+  aa = cc === 5 ? aa - 1 : aa; 
 }
 
 chrome.storage.local.set({'dash_popup': dash_popup});

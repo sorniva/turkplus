@@ -1,9 +1,11 @@
 var dashboard = {};
+var tpeexport = '';
 
 chrome.storage.onChanged.addListener( function (changes) {
   for (var key in changes) {
     if (key === 'dash_popup') {
       _dashboard();
+      console.log('saved!');
     }
   }
 });
@@ -16,18 +18,15 @@ chrome.runtime.onMessage.addListener( function (request, sender, sendResponse) {
   if (request.msg == 'update') {
     _tpe();
     sendResponse({msg: 'Update received!'});
-    console.log('Update received!');
   }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  chrome.storage.local.get('dash_popup', function (data) {
-    dashboard = data.dash_popup || {};
-
-    _dashboard();
-    _get_dashboard();
-  });
+  _dashboard();
+  _get_dashboard();
 });
+
+_tpe();
 
 $('html').on('click', '.dashboard, .all, .breakdown', function() {
     if (!$(this).hasClass('active')) {
@@ -46,97 +45,120 @@ $('html').on('click', '.sync-todays', function() {
   });
 });
 
+$('html').on('click', '.export-todays', function() {
+  _clip(tpeexport);
+});
 
-
-
-_tpe();
 
 function _tpe () {
-	var html_1 = '', html_2 = '', count_1 = 0, count_2 = 0, tpe_export = '';
+  var html1 = '', html2 = '', c1 = 0, c2 = 0, tpe = 0;
 
-	chrome.storage.local.get('_hits', function (data) {
-		var _hits_1 = data._hits, _hits_2 = {};
+  chrome.storage.local.get('_hits', function (data) {
+    var h1 = data._hits, h2 = {};
 
-		for (var key in _hits_1) {
-			if (_hits_1[key].status.match(/(Submitted|Paid|Approved|Pending)/)) {
-				var ckey = _hits_1[key].reqid;
+    for (var a in h1) {
+      if (h1[a].status.match(/(Submitted|Paid|Approved|Pending)/)) {
+        var b = h1[a].reqid;
+        
+        if (!h2[b]) {
+          h2[b] = {
+            req    : h1[a].req,
+            hits   : 1,
+            reward : Number(h1[a].reward.replace(/[^0-9.]/g, ''))
+          };
+        }
+        else {
+          h2[b].hits   += 1;
+          h2[b].reward += Number(h1[a].reward.replace(/[^0-9.]/g, ''));
+        }
+        c1 ++;
+        tpe += Number(h1[a].reward.replace(/[^0-9.]/g, ''));
+      }
+    }
 
-				if (!_hits_2[ckey]) {
-					_hits_2[ckey] = {
-						req       : _hits_1[key].req,
-						submitted : 1,
-						reward    : Number(_hits_1[key].reward.replace(/[^0-9.]/g, ''))
-					};
-				}
-				else {
-					_hits_2[ckey].submitted += 1;
-					_hits_2[ckey].reward    += Number(_hits_1[key].reward.replace(/[^0-9.]/g, ''));
-				}
-				count_2 ++;
-			}
-		}
+    var s1 = Object.keys(h1).sort( function (a, b) {
+      return h1[a].idx - h1[b].idx;
+    });
 
-		var _sort_1 = Object.keys(_hits_1).sort( function (a, b) {
-			return _hits_1[a].idx - _hits_1[b].idx;
-		});
+    var s2 = Object.keys(h2).sort( function(a, b) {
+      return h2[a].reward - h2[b].reward;
+    });
 
-		var _sort_2 = Object.keys(_hits_2).sort( function(a, b) {
-			return _hits_2[a].reward - _hits_2[b].reward;
-		});
+    for (var i = 0; i < s1.length; i ++) {
+      var k1 = s1[i], color = '', source = '';
+      
+      if (h1[k1].status.match(/Paid|Approved/))     { color = 'green'; }
+      if (h1[k1].status.match(/Pending|Submitted/)) { color = 'orange'; }
+      if (h1[k1].status.match(/Rejected/))          { color = 'red';    }
 
-		for (var i = 0; i < _sort_1.length; i ++) {
-			var key_1 = _sort_1[i];
-			var color = '', source = '';
-			if      (_hits_1[key_1].status.match(/Paid|Approved/))     { color = 'green';  }
-			else if (_hits_1[key_1].status.match(/Pending|Submitted/)) { color = 'orange'; }
-			else if (_hits_1[key_1].status.match(/Rejected/))          { color = 'red';    }
-
-            if (_hits_1[key_1].src) {
-                source = '<a href="' + _hits_1[key_1].src + '" target="_blank" style="text-decoration: none;">🗗</a> ';
-            }
+      if (h1[k1].src) {
+        source = '<a href="' + h1[k1].src + '" target="_blank" style="text-decoration: none;">🗗</a> ';
+      }
             
-			html_1 +=
-				'<tr>' +
-				'    <td><div>' + source + _hits_1[key_1].req +'</div></td>' +
-				'    <td>' + _hits_1[key_1].title + '</td>' +
-				'    <td>' + _hits_1[key_1].reward + '</td>' +
-				'    <td title="' + _hits_1[key_1].hitid + '" style="color: ' + color + '">' + _hits_1[key_1].status.split(/\s/)[0] + '</td>' +
-				'</tr>'
-			;
-			count_1 ++;
-		}
+      html1 +=
+        '<tr>' +
+        '  <td><div>' + source + h1[k1].req +'</div></td>' +
+        '  <td>' + h1[k1].title + '</td>' +
+        '  <td style="width: 70px;">' + h1[k1].reward + '</td>' +
+        '  <td style="width: 70px; color: ' + color + '">' + h1[k1].status.split(/\s/)[0] + '</td>' +
+        '</tr>'
+      ;
+      c2 ++;
+    }
 
-		for (var j = _sort_2.length - 1; j > -1; j --) {
-			var key_2 = _sort_2[j];
+    tpeexport  = '[b]Today\'s Projected Earnings: $' + tpe.toFixed(2) + '[/b] (Exported from Turk+)\n';
+    tpeexport += '[spoiler=Today\'s Projected Earnings Full Details][table][tr][th][b]Requester[/b][/th][th][b]HITs[/b][/th][th][b]Projected[/b][/th][/tr]';
+    
+    for (var j = s2.length - 1; j > -1; j --) {
+      var k2 = s2[j];
 
-			html_2 +=
-				'<tr>' +
-				'    <td>' + _hits_2[key_2].req + '</td>' +
-				'    <td style="width: 50px; text-align: right;">' + _hits_2[key_2].submitted + '</td>' +
-				'    <td style="width: 50px; text-align: right;">$' + _hits_2[key_2].reward.toFixed(2) + '</td>' +
-				'</tr>'
-			;
-		}
+      html2 +=
+        '<tr>' +
+        '  <td>' + h2[k2].req + '</td>' +
+        '  <td style="width: 50px; text-align: right;">' + h2[k2].hits + '</td>' +
+        '  <td style="width: 50px; text-align: right;">$' + h2[k2].reward.toFixed(2) + '</td>' +
+        '</tr>'
+      ;
+      
+      tpeexport +=
+        '[tr]' +
+        '  [td]' +
+        '    [url=https://www.mturk.com/mturk/searchbar?selectedSearchType=hitgroups&requesterId=' + k2 + ']' + h2[k2].req + '[/url]' +
+        '  [/td]' +
+        '  [td]' + h2[k2].hits  + '[/td]' +
+        '  [td]$' + h2[k2].reward.toFixed(2) +'[/td]' +
+        '[/tr]\n'
+      ;
+    }
 
-		$('#all').html(html_1);
-		$('#breakdown').html(html_2);
-	});
+    $('#all').html(html1);
+    $('#breakdown').html(html2);
+  });
 }
 
 function _dashboard () {
-  for (var i in dashboard) {
-    if(dashboard.hasOwnProperty(i)) {
-      $('.dash').eq(i).html(dashboard[i]);
+  chrome.storage.local.get('dash_popup', function (data) {
+    dashboard = data.dash_popup || {};
+    
+    for (var a in dashboard) {
+      if (dashboard.hasOwnProperty(a)) {
+        $('.dash').eq(a).html(dashboard[a]);
+      }
     }
-  }
+  });
 }
 
 function _get_dashboard () {
   $.get('https://www.mturk.com/mturk/dashboard', function (data) {
     var _ = $(data);
-    var err   = _.find('.error_title:contains(You have exceeded the maximum allowed page request rate for this website.)').length;
+    var err = _.find('.error_title:contains(You have exceeded the maximum allowed page request rate for this website.)').length;
 
-    if (!err) {
+    if (err) {
+      setTimeout(function () { _get_dashboard(); }, 3000);
+    }
+    else {
+      var aa = 4, bb = 5, $elem = _.find('a[href^="/mturk/statusdetail?encodedDate"]').parents('tr');
+
       var dash_popup = {
         // Total Earnings
         0 : _.find('#approved_hits_earnings_amount').text(),
@@ -151,52 +173,27 @@ function _get_dashboard () {
         9 : _.find('td.metrics-table-first-value:contains(... Pending)'   ).next().text(),
         7 : _.find('td.metrics-table-first-value:contains(... Approved)'  ).next().next().text(),
         8 : _.find('td.metrics-table-first-value:contains(... Rejected)'  ).next().next().text(),
-        
-        // Today
-        10 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(0).parent().text(),
-        11 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(0).parent().next().text(),
-        12 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(0).parent().next().next().text(),
-        13 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(0).parent().next().next().next().text(),
-        14 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(0).parent().next().next().next().next().text(),
-        15 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(0).parent().next().next().next().next().next().text(),
-        
-        // Day 2
-        16 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(1).parent().text(),
-        17 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(1).parent().next().text(),
-        18 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(1).parent().next().next().text(),
-        19 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(1).parent().next().next().next().text(),
-        20 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(1).parent().next().next().next().next().text(),
-        21 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(1).parent().next().next().next().next().next().text(),
-
-        // Day 3
-        22 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(2).parent().text(),
-        23 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(2).parent().next().text(),
-        24 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(2).parent().next().next().text(),
-        25 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(2).parent().next().next().next().text(),
-        26 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(2).parent().next().next().next().next().text(),
-        27 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(2).parent().next().next().next().next().next().text(),
-
-        // Day 4
-        28 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(3).parent().text(),
-        29 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(3).parent().next().text(),
-        30 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(3).parent().next().next().text(),
-        31 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(3).parent().next().next().next().text(),
-        32 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(3).parent().next().next().next().next().text(),
-        33 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(3).parent().next().next().next().next().next().text(),
-
-        // Day 5
-        34 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(4).parent().text(),
-        35 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(4).parent().next().text(),
-        36 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(4).parent().next().next().text(),
-        37 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(4).parent().next().next().next().text(),
-        38 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(4).parent().next().next().next().next().text(),
-        39 : _.find("a[href^='/mturk/statusdetail?encodedDate']").eq(4).parent().next().next().next().next().next().text(),
       };
+      
+      // HIT Status
+      for (var i = 10; i < ($elem.length * 5) + 10; i ++) { 
+        var cc = ++ bb % 6;
+        dash_popup[i] = $elem.eq(aa).children().eq(cc).text().trim();
+        aa = cc === 5 ? aa - 1 : aa; 
+      }
 
       chrome.storage.local.set({'dash_popup': dash_popup});
     }
-    else {
-      _get_dashboard();
-    }
   });
 }
+
+function _clip (text) {
+  var input = document.createElement('input');
+  //input.style.position = 'fixed';
+  input.style.opacity = 0;
+  input.value = text;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('Copy');
+  document.body.removeChild(input);
+};
