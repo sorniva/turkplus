@@ -53,8 +53,8 @@ $('html').on('click', '.export-todays', function() {
 function _tpe () {
   var html1 = '', html2 = '', c1 = 0, c2 = 0, tpe = 0;
 
-  chrome.storage.local.get('_hits', function (data) {
-    var h1 = data._hits, h2 = {};
+  chrome.storage.local.get('__hits', function (data) {
+    var h1 = data.__hits, h2 = {};
 
     for (var a in h1) {
       if (h1[a].status.match(/(Submitted|Paid|Approved|Pending)/)) {
@@ -62,7 +62,7 @@ function _tpe () {
         
         if (!h2[b]) {
           h2[b] = {
-            req    : h1[a].req,
+            reqname : h1[a].reqname,
             hits   : 1,
             reward : Number(h1[a].reward.replace(/[^0-9.]/g, ''))
           };
@@ -77,7 +77,7 @@ function _tpe () {
     }
 
     var s1 = Object.keys(h1).sort( function (a, b) {
-      return h1[a].idx - h1[b].idx;
+      return h1[a].viewed - h1[b].viewed;
     });
 
     var s2 = Object.keys(h2).sort( function(a, b) {
@@ -96,21 +96,21 @@ function _tpe () {
       else if (h1[k1].status.match(/Rejected/)) {
         color = 'red';
       }
-      if (h1[k1].src) {
-        source = '<a href="' + h1[k1].src + '" target="_blank" style="text-decoration: none;"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a> ';
+      if (h1[k1].source) {
+        source = '<a href="' + h1[k1].source + '" target="_blank" style="text-decoration: none;"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a> ';
       }
       if (pend) {
-        if (h1[k1].aa && h1[k1].sub) {
-          autoapp = _time_til_aa(h1[k1].aa, h1[k1].sub);
+        if (h1[k1].autoapp && h1[k1].submitted) {
+          autoapp = _time_til_aa(h1[k1].autoapp, h1[k1].submitted);
         }
         else {
-          autoapp = 'There is no AA data for this HIT.'
+          autoapp = 'There is no AA data for this HIT.';
         }
       }
       
      html1 +=
       '<tr>' +
-        '  <td><div>' + source + h1[k1].req +'</div></td>' +
+        '  <td><div>' + source + h1[k1].reqname +'</div></td>' +
         '  <td>' + h1[k1].title + '</td>' +
         '  <td style="width: 70px;">' + h1[k1].reward + '</td>' +
         '  <td style="width: 70px; color: ' + color + '; cursor: context-menu;" data-toggle="tooltip" data-placement="left" title="' + autoapp + '">' + h1[k1].status.split(/\s/)[0] + '</td>' +
@@ -127,7 +127,7 @@ function _tpe () {
 
       html2 +=
         '<tr>' +
-        '  <td>' + h2[k2].req + '</td>' +
+        '  <td>' + h2[k2].reqname + '</td>' +
         '  <td style="width: 50px; text-align: right;">' + h2[k2].hits + '</td>' +
         '  <td style="width: 50px; text-align: right;">$' + h2[k2].reward.toFixed(2) + '</td>' +
         '</tr>'
@@ -146,7 +146,7 @@ function _tpe () {
 
     $('#all').html(html1);
     $('#breakdown').html(html2);
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
   });
 }
 
@@ -236,4 +236,4 @@ function _clip (text) {
   input.select();
   document.execCommand('Copy');
   document.body.removeChild(input);
-};
+}
