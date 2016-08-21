@@ -7,15 +7,15 @@ document.addEventListener('DOMContentLoaded', function () {
 var timeis = Date.now();
 
 function _send_hit () {  
-  var req      = document.getElementsByName('prevRequester').length ? document.getElementsByName('prevRequester')[0].value : 'error';
+  var reqname  = document.getElementsByName('prevRequester').length ? document.getElementsByName('prevRequester')[0].value : null;
   var reqid    = document.getElementsByName('requesterId').length ? document.getElementsByName('requesterId')[0].value : req;
-  var title    = document.getElementsByClassName('capsulelink_bold').length ? document.getElementsByClassName('capsulelink_bold')[0].textContent.trim() : 'error';
-  var reward   = document.getElementsByName('prevReward').length ? document.getElementsByName('prevReward')[0].value.replace(/USD/, '$') : 'error';
-  var autoapp  = document.getElementsByName('hitAutoAppDelayInSeconds').length ? document.getElementsByName('hitAutoAppDelayInSeconds')[0].value.replace(/USD/, '$') : null;
+  var title    = document.getElementsByClassName('capsulelink_bold').length ? document.getElementsByClassName('capsulelink_bold')[0].textContent.trim() : null;
+  var reward   = document.getElementsByName('prevReward').length ? document.getElementsByName('prevReward')[0].value.replace(/USD/, '$') : null;
+  var autoapp  = document.getElementsByName('hitAutoAppDelayInSeconds').length ? document.getElementsByName('hitAutoAppDelayInSeconds')[0].value : null;
   
-  var hitid    = document.querySelectorAll('[class="popup-header"] > [name="hitId"]')        [0].value;
-  var assignid = document.querySelectorAll('[class="popup-header"] > [name="assignmentId"]') [0].value;
-  var state    = document.querySelectorAll('[class="popup-header"] > [name="isAccepted"]')   [0].value === 'true' ? 'Accepted' : 'Previewed';
+  var hitid    = document.querySelectorAll('[class="popup-header"] > [name="hitId"]')[0].value;
+  var assignid = document.querySelectorAll('[class="popup-header"] > [name="assignmentId"]')[0].value;
+  var state    = document.querySelectorAll('[class="popup-header"] > [name="isAccepted"]')[0].value === 'true' ? 'Accepted' : 'Previewed';
 
   var timer    = document.getElementById('theTime').textContent.trim();
   var accepted = _accepted_when(timer);
@@ -25,7 +25,7 @@ function _send_hit () {
 
   var data = {
     idx      : 9999,
-    req      : req,
+    req      : reqname,
     reqid    : reqid,
     title    : title,
     reward   : reward,
@@ -46,12 +46,12 @@ function _send_hit () {
 
 // Get the date string for when the HIT was accepted
 function _accepted_when (time) {
+  var split   = time.split(/:| /);
   var days    = 0;
   var hours   = 0;
   var minutes = 0;
   var seconds = 0;
   var milli   = 0;
-  var split   = time.split(/:| /);
   if (split.length == 3) {
     hours   = parseInt(split[0], 10);
     minutes = parseInt(split[1], 10);
