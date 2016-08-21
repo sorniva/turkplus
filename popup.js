@@ -85,22 +85,35 @@ function _tpe () {
     });
 
     for (var i = 0; i < s1.length; i ++) {
-      var k1 = s1[i], color = '', source = '';
+      var k1 = s1[i], color = '', source = '', autoapp = '', pend = false;
       
-      if (h1[k1].status.match(/Paid|Approved/))     { color = 'green'; }
-      if (h1[k1].status.match(/Pending|Submitted/)) { color = 'orange'; }
-      if (h1[k1].status.match(/Rejected/))          { color = 'red';    }
-
+      if (h1[k1].status.match(/Paid|Approved/)) {
+        color = 'green';
+      }
+      else if (h1[k1].status.match(/Pending|Submitted/)) {
+        color = 'orange'; pend = true;
+      }
+      else if (h1[k1].status.match(/Rejected/)) {
+        color = 'red';
+      }
       if (h1[k1].src) {
         source = '<a href="' + h1[k1].src + '" target="_blank" style="text-decoration: none;">🗗</a> ';
       }
-            
-      html1 +=
-        '<tr>' +
+      if (pend) {
+        if (h1[k1].aa && h1[k1].sub) {
+          autoapp = _time_til_aa(h1[k1].aa, h1[k1].sub);
+        }
+        else {
+          autoapp = 'There is no AA data for this HIT.'
+        }
+      }
+      
+     html1 +=
+      '<tr>' +
         '  <td><div>' + source + h1[k1].req +'</div></td>' +
         '  <td>' + h1[k1].title + '</td>' +
         '  <td style="width: 70px;">' + h1[k1].reward + '</td>' +
-        '  <td style="width: 70px; color: ' + color + '">' + h1[k1].status.split(/\s/)[0] + '</td>' +
+        '  <td style="width: 70px; color: ' + color + '; cursor: context-menu;" data-toggle="tooltip" data-placement="left" title="' + autoapp + '">' + h1[k1].status.split(/\s/)[0] + '</td>' +
         '</tr>'
       ;
       c2 ++;
@@ -133,6 +146,7 @@ function _tpe () {
 
     $('#all').html(html1);
     $('#breakdown').html(html2);
+    $('[data-toggle="tooltip"]').tooltip()
   });
 }
 
@@ -185,6 +199,32 @@ function _get_dashboard () {
       chrome.storage.local.set({'dash_popup': dash_popup});
     }
   });
+}
+
+function _time_til_aa (aa, sub) {
+  var willapp = 'This HIT will approve in ';
+  var autoapp = Number(aa);
+  var submit  = Number(sub);
+  var current = new Date().getTime() / 1000;
+  var remain  = Math.round(submit + autoapp - current);
+
+  if (remain > 0) {
+    var dd = Math.floor((remain / (60 * 60 * 24)));
+    var hh = Math.floor((remain / (60 * 60)) % 24);
+    var mm = Math.floor((remain / (60)) % 60);
+    var ss = remain % 60;
+        
+    willapp +=
+      (dd === 0 ? '' : dd + (dd > 1 ? ' days '    : ' day '))    +
+      (hh === 0 ? '' : hh + (hh > 1 ? ' hours '   : ' hour '))   +
+      (mm === 0 ? '' : mm + (mm > 1 ? ' minutes ' : ' minute ')) +
+      (ss === 0 ? '' : ss + (ss > 1 ? ' seconds ' : ' second '))
+    ;
+  }
+  else {
+    willapp = "This HIT should be approved.";
+  }
+  return willapp;
 }
 
 function _clip (text) {

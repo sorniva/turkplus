@@ -1,43 +1,47 @@
+var timeis = Date.now();
+
 document.addEventListener('DOMContentLoaded', function () {
 
-if (document.getElementsByClassName('popup-header').length) {
-	var req      = document.getElementsByName('prevRequester').length ? document.getElementsByName('prevRequester')[0].value : 'error';
-	var reqid    = document.getElementsByName('requesterId').length ? document.getElementsByName('requesterId')[0].value : req;
-	var title    = document.getElementsByClassName('capsulelink_bold').length ? document.getElementsByClassName('capsulelink_bold')[0].textContent.trim() : 'error';
-	var reward   = document.getElementsByName('prevReward').length ? document.getElementsByName('prevReward')[0].value.replace(/USD/, '$') : 'error';
+  if (document.getElementsByClassName('popup-header').length) {
+    var req      = document.getElementsByName('prevRequester').length ? document.getElementsByName('prevRequester')[0].value : 'error';
+    var reqid    = document.getElementsByName('requesterId').length ? document.getElementsByName('requesterId')[0].value : req;
+    var title    = document.getElementsByClassName('capsulelink_bold').length ? document.getElementsByClassName('capsulelink_bold')[0].textContent.trim() : 'error';
+    var reward   = document.getElementsByName('prevReward').length ? document.getElementsByName('prevReward')[0].value.replace(/USD/, '$') : 'error';
+    var autoapp  = document.getElementsByName('hitAutoAppDelayInSeconds').length ? document.getElementsByName('hitAutoAppDelayInSeconds')[0].value.replace(/USD/, '$') : null;
+  
+    var hitid    = document.querySelectorAll('[class="popup-header"] > [name="hitId"]')        [0].value;
+    var assignid = document.querySelectorAll('[class="popup-header"] > [name="assignmentId"]') [0].value;
+    var state    = document.querySelectorAll('[class="popup-header"] > [name="isAccepted"]')   [0].value === 'true' ? 'Accepted' : 'Previewed';
 
-	var hitid    = document.querySelectorAll('[class="popup-header"] > [name="hitId"]')        [0].value;
-	var assignid = document.querySelectorAll('[class="popup-header"] > [name="assignmentId"]') [0].value;
-	var state    = document.querySelectorAll('[class="popup-header"] > [name="isAccepted"]')   [0].value === 'true' ? 'Accepted' : 'Previewed';
+    var timer    = document.getElementById('theTime').textContent.trim();
+    var accepted = _accepted_when(timer);
+    var date     = _amz_date(accepted);
 
-	var timer    = document.getElementById('theTime').textContent.trim();
-	var accepted = _accepted_when(timer);
-	var date     = _amz_date(accepted);
+    var src = document.querySelectorAll('iframe').length ? document.querySelectorAll('iframe')[0].src : null;
 
-	var src = document.querySelectorAll('iframe').length ? document.querySelectorAll('iframe')[0].src : null;
+    var data = {
+      idx      : 9999,
+      req      : req,
+      reqid    : reqid,
+      title    : title,
+      reward   : reward,
+      hitid    : hitid,
+      assignid : assignid,
+      status   : state,
+      date     : date,
+      src      : src, 
+      aa       : autoapp,
+      sub      : null
+    };
 
-	var data = {
-		idx      : 9999,
-		req      : req,
-		reqid    : reqid,
-		title    : title,
-		reward   : reward,
-		hitid    : hitid,
-		assignid : assignid,
-		status   : state,
-		date     : date,
-		src      : src
-	};
-
-    chrome.runtime.sendMessage({msg: 'hit', data: data}, function (response) {
+      chrome.runtime.sendMessage({msg: 'hit', data: data}, function (response) {
         console.log(response.msg);
         console.log(response.data);
-    });
-	console.log(data);
-}
-    
+      });
+    console.log(data);
+  }
+  
 });
-var timeis   = Date.now();
 
 // Get the date string for when the HIT was accepted
 function _accepted_when (time) {

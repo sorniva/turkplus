@@ -56,20 +56,6 @@ var worst_case_scenario =
 	(Math.round(hits_approved / (hits_approved + hits_rejected + hits_pending) * 1000000)/10000).toFixed(4) + '%'
 ;
 
-/*
-var dash_popup = {
-    earnings_hits     : $('#approved_hits_earnings_amount') .text(),
-    earnings_bonus    : $('#bonus_earnings_amount')         .text(),
-    earnings_total    : $('#total_earnings_amount')         .text(),
-    earnings_transfer : $('#transfer_earnings')             .text(),
-    hits_submitted    : $('td.metrics-table-first-value:contains(HITs Submitted)') .next() .text(),
-    hits_approved     : $('td.metrics-table-first-value:contains(... Approved)')   .next() .text(),
-    hits_rejected     : $('td.metrics-table-first-value:contains(... Rejected)')   .next() .text(),
-    hits_pending      : $('td.metrics-table-first-value:contains(... Pending)')    .next() .text(),
-    hits_approved_per : $('td.metrics-table-first-value:contains(... Approved)')   .next() .next() .text(),
-    hits_rejected_per : $('td.metrics-table-first-value:contains(... Rejected)')   .next() .next() .text()  
-}
-*/
 var aa = 4, bb = 5, $elem = $('a[href^="/mturk/statusdetail?encodedDate"]').parents('tr');
 
 var dash_popup = {
