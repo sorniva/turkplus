@@ -40,73 +40,76 @@ function _update () {
                                                 
 
 function _loaded () {
-chrome.storage.local.get('_hits', function (data) {
-	_hits = data._hits || {};
+  chrome.storage.local.get('_hits', function (data) {
+    _hits = data._hits || {};
 
-	_update_tpe();
+    _update_tpe();
 
 	// Listens for POST (before) requests to https://www.mturk.com/mturk/externalSubmit
-	chrome.webRequest.onBeforeRequest.addListener( function (data) {
-		if (data.method == 'POST') {
-			requests[data.requestId] = {
-				hitid    :  data.requestBody.formData.hitId       ? data.requestBody.formData.hitId[0]        : null,
-				assignid : data.requestBody.formData.assignmentId ? data.requestBody.formData.assignmentId[0] : null,
-			};
-		}
-	}, { urls: ['https://www.mturk.com/mturk/externalSubmit'] }, ['requestBody']);
+    chrome.webRequest.onBeforeRequest.addListener( function (data) {
+      if (data.method == 'POST') {
+        requests[data.requestId] = {
+          hitid    :  data.requestBody.formData.hitId       ? data.requestBody.formData.hitId[0]        : null,
+          assignid : data.requestBody.formData.assignmentId ? data.requestBody.formData.assignmentId[0] : null,
+        };
+      }
+    }, { urls: ['https://www.mturk.com/mturk/externalSubmit'] }, ['requestBody']);
 
-	// Listens for POST (after) requests to https://www.mturk.com/mturk/externalSubmit
-	chrome.webRequest.onCompleted.addListener( function (data) {
-		if (data.method == 'POST' && data.statusCode == '200') {
-
-			if (requests[data.requestId].hitid) {
-				var key = requests[data.requestId].hitid;
-				_hits[key].status = 'Submitted';
-			}
-			else {
-				for (var key in _hits) {
-					if (_hits[key].assignid === requests[data.requestId].assignid) {
-						_hits[key].status = 'Submitted';
-					}
-				}
-			}
-			_update_tpe();
-		}
-	}, { urls: ['https://www.mturk.com/mturk/externalSubmit'] }, ['responseHeaders']);
+    // Listens for POST (after) requests to https://www.mturk.com/mturk/externalSubmit
+    chrome.webRequest.onCompleted.addListener( function (data) {
+      if (data.method == 'POST' && data.statusCode == '200') {
+        var sub = new Date().getTime() / 1000;
+        if (requests[data.requestId].hitid) {
+          var key = requests[data.requestId].hitid;
+          _hits[key].status = 'Submitted';
+          _hits[key].sub    = sub;
+        }
+        else {
+          for (var key in _hits) {
+            if (_hits[key].assignid === requests[data.requestId].assignid) {
+              _hits[key].status = 'Submitted';
+              _hits[key].sub    = sub;
+            }
+          }
+        }
+        _update_tpe();
+      }
+    }, { urls: ['https://www.mturk.com/mturk/externalSubmit'] }, ['responseHeaders']);
 
     // Listens for messages from content scripts.
     chrome.runtime.onMessage.addListener( function (request, sender, sendResponse) {
-        if (request.msg == 'hit') {
-            _add_hit(request.data);
-            sendResponse({msg: 'Received HIT!', data: _hits[request.data.hitid]});
-        }
-        if (request.msg == 'sync') {
-            _status_detail(sender.id);
-            
-            sendResponse({msg: 'Syncing now!'});
-		}
+      if (request.msg == 'hit') {
+        _add_hit(request.data);
+        sendResponse({msg: 'Received HIT!', data: _hits[request.data.hitid]});
+      }
+      if (request.msg == 'sync') {
+        _status_detail(sender.id);
+        sendResponse({msg: 'Syncing now!'});
+      }
     });
-
-});
+    
+  });
 }
 
 // Adds a HIT to the log
 function _add_hit (data) {
-	if (!_hits[data.hitid]) {
-		_hits[data.hitid] = {
-            idx      : data.idx,
-			req      : data.req,
-			title    : data.title,
-			reward   : data.reward,
-			status   : data.status,
-			reqid    : data.reqid,
-			hitid    : data.hitid,
-			assignid : data.assignid,
-			date     : data.date,
-            src      : data.src
-		};
-		chrome.storage.local.set({'_hits': _hits});
-	}
+  if (!_hits[data.hitid]) {
+    _hits[data.hitid] = {
+      idx      : data.idx,
+      req      : data.req,
+      title    : data.title,
+      reward   : data.reward,
+      status   : data.status,
+      reqid    : data.reqid,
+      hitid    : data.hitid,
+      assignid : data.assignid,
+      date     : data.date,
+      src      : data.src,
+      aa       : data.aa,
+      sub      : null
+    };
+    chrome.storage.local.set({'_hits': _hits});
+  }
 }
 
 // Updates the TPE and removes old HITs from previous day
@@ -163,7 +166,9 @@ function _status_detail (tab) {
 							hitid    : hitid,
 							assignid : 'N/A',
 							date     : date,
-                            src      : null
+                            src      : null,
+                            aa       : null,
+                            sub      : null
 						};
 					}
 					else {
