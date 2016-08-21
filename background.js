@@ -22,14 +22,14 @@ chrome.storage.local.get('__hits', function (data) {
       var sub = new Date().getTime() / 1000;
       if (requests[data.requestId].hitid) {
         var key = requests[data.requestId].hitid;
-        __hits[key].status = 'Submitted';
-        __hits[key].sub    = sub;
+        __hits[key].status    = 'Submitted';
+        __hits[key].submitted = sub;
       }
       else {
         for (var key in __hits) {
           if (__hits[key].assignid === requests[data.requestId].assignid) {
-            __hits[key].status = 'Submitted';
-            __hits[key].sub    = sub;
+            __hits[key].status    = 'Submitted';
+            __hits[key].submitted = sub;
           }
         }
       }
