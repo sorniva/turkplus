@@ -97,7 +97,7 @@ function _tpe () {
         color = 'red';
       }
       if (h1[k1].src) {
-        source = '<a href="' + h1[k1].src + '" target="_blank" style="text-decoration: none;">🗗</a> ';
+        source = '<a href="' + h1[k1].src + '" target="_blank" style="text-decoration: none;"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a> ';
       }
       if (pend) {
         if (h1[k1].aa && h1[k1].sub) {
