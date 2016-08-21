@@ -8,34 +8,38 @@ var timeis = Date.now();
 
 function _send_hit () {  
   var reqname  = document.getElementsByName('prevRequester').length ? document.getElementsByName('prevRequester')[0].value : null;
-  var reqid    = document.getElementsByName('requesterId').length ? document.getElementsByName('requesterId')[0].value : req;
+  var reqid    = document.getElementsByName('requesterId').length ? document.getElementsByName('requesterId')[0].value : reqname;
   var title    = document.getElementsByClassName('capsulelink_bold').length ? document.getElementsByClassName('capsulelink_bold')[0].textContent.trim() : null;
   var reward   = document.getElementsByName('prevReward').length ? document.getElementsByName('prevReward')[0].value.replace(/USD/, '$') : null;
   var autoapp  = document.getElementsByName('hitAutoAppDelayInSeconds').length ? document.getElementsByName('hitAutoAppDelayInSeconds')[0].value : null;
   
   var hitid    = document.querySelectorAll('[class="popup-header"] > [name="hitId"]')[0].value;
   var assignid = document.querySelectorAll('[class="popup-header"] > [name="assignmentId"]')[0].value;
-  var state    = document.querySelectorAll('[class="popup-header"] > [name="isAccepted"]')[0].value === 'true' ? 'Accepted' : 'Previewed';
+  var status   = document.querySelectorAll('[class="popup-header"] > [name="isAccepted"]')[0].value === 'true' ? 'Accepted' : 'Previewed';
 
   var timer    = document.getElementById('theTime').textContent.trim();
   var accepted = _accepted_when(timer);
   var date     = _amz_date(accepted);
 
-  var src = document.querySelectorAll('iframe').length ? document.querySelectorAll('iframe')[0].src : null;
+  var source = document.querySelectorAll('iframe').length ? document.querySelectorAll('iframe')[0].src : null;
 
   var data = {
-    idx      : 9999,
-    req      : reqname,
-    reqid    : reqid,
-    title    : title,
-    reward   : reward,
-    hitid    : hitid,
-    assignid : assignid,
-    status   : state,
-    date     : date,
-    src      : src, 
-    aa       : autoapp,
-    sub      : null
+    reqname   : reqname,
+    reqid     : reqid,
+    title     : title,
+    reward    : reward,
+    autoapp   : autoapp,
+    status    : status,
+    
+    hitid     : hitid,
+    assignid  : assignid,
+    
+    source    : source,
+    
+    date      : date,
+    viewed    : new Date().getTime(),
+    
+    submitted : null
   };
 
   chrome.runtime.sendMessage({msg: 'hit', data: data}, function (response) {
