@@ -167,38 +167,41 @@ function _export_vb (key) {
 	  '[b]Qualifications:[/b] ' + hit.quals + '\n' +
 	  '[/td][/tr][/table]';
 
-  _clip(exportcode);
+  _copyToClip(exportcode);
   alert('Forum export has been copied to your clipboard.');
 }
 
 function _export_irc (key) {
-  var hit = hits[key];
+  var hit = hits[key]; var ircexport = '';
 
   $.get('https://ns4t.net/yourls-api.php?action=bulkshortener&title=MTurk&signature=39f6cf4959&urls[]=' + hit.prevlink + '&urls[]=' + hit.pandlink, function (data) {
     var urls = data.split(';'),
         preview = urls[0],
         panda   = urls[1];
 
-    var ircexport = hit.masters === 'Y' ? 'MASTERS - Req: ' + hit.reqname + ' - Title: ' + hit.title + ' - Reward: ' + hit.reward : 'Req: ' + hit.reqname + ' - Title: ' + hit.title + ' - Reward: ' + hit.reward;
-    ircexport += preview !== panda ? ' - Prev: ' + preview + ' - PandA: '+ panda : ' - Search: ' + preview;
-    ircexport += ' - TO: (Pay: ' + hit.to.pay + ') (Fair: ' + hit.to.fair + ') (Comm: ' + hit.to.comm + ') (Fast: ' + hit.to.fast + ')';
+    ircexport = hit.masters === 'Y' ? 'MASTERS ■ Req: ' + hit.reqname + ' ■ Title: ' + hit.title + ' ■ Reward: ' + hit.reward : 'Req: ' + hit.reqname + ' ■ Title: ' + hit.title + ' ■ Reward: ' + hit.reward;
+    ircexport += preview !== panda ? ' ■ Prev: ' + preview + ' ■ PandA: '+ panda : ' ■ Search: ' + preview;
+    ircexport += ' ■ TO: (Pay: ' + hit.to.pay + ') (Fair: ' + hit.to.fair + ') (Comm: ' + hit.to.comm + ') (Fast: ' + hit.to.fast + ')';
 
-    _clip(ircexport);
-    alert('IRC export has been copied to your clipboard.');
-
+  }).always(function () {
+    _copyToClipboard(ircexport);
   }).fail(function () {
     alert('Failed to shorten links.');
   });
 }
 
-function _clip (text) {
-  console.log(text);
+function _copyToClip (text) {
   var input = document.createElement('textarea');
   input.style.opacity = 0;
   input.value = text;
   document.body.appendChild(input);
   input.select();
   document.execCommand('Copy');
+  console.log(input.value)
   document.body.removeChild(input);
   console.log('copied');
+}
+
+function _copyToClipboard (text) {
+    window.prompt('Copy IRC export to clipboard: Ctrl+C, Enter', text);
 }
