@@ -92,16 +92,22 @@ for (var i = 0; i < $hits.length; i ++) {
   to.push([key, req_id]);
 
 
-  $hit.find('a.capsulelink').after('<button class="vb" data-key="' + key + '" type="button" style="background-color: transparent; border: solid 1px #000000; margin-left: 5px;">vB</button>');
+  $hit.find('a.capsulelink').after(
+    '<button class="vb" data-key="' + key + '" type="button" style="background-color: transparent; border: solid 1px #000000; margin-left: 5px;">vB</button>' +
+    '<button class="irc" data-key="' + key + '" type="button" style="background-color: transparent; border: solid 1px #000000; margin-left: 5px;">IRC</button>'
+  );
 }
 if ($hits.length) {
   _to();
 }
   
   $('body').on('click', '.vb', function () {
-  _export_vb($(this).data('key'));
-});
+    _export_vb($(this).data('key'));
+  });
   
+  $('body').on('click', '.irc', function () {
+    _export_irc($(this).data('key'));
+  });
 }
 
 function _to () {
@@ -165,7 +171,28 @@ function _export_vb (key) {
   alert('Forum export has been copied to your clipboard.');
 }
 
+function _export_irc (key) {
+  var hit = hits[key];
+
+  $.get('https://ns4t.net/yourls-api.php?action=bulkshortener&title=MTurk&signature=39f6cf4959&urls[]=' + hit.prevlink + '&urls[]=' + hit.pandlink, function (data) {
+    var urls = data.split(';'),
+        preview = urls[0],
+        panda   = urls[1];
+
+    var ircexport = hit.masters === 'Y' ? 'MASTERS - Req: ' + hit.reqname + ' - Title: ' + hit.title + ' - Reward: ' + hit.reward : 'Req: ' + hit.reqname + ' - Title: ' + hit.title + ' - Reward: ' + hit.reward;
+    ircexport += preview !== panda ? ' - Prev: ' + preview + ' - PandA: '+ panda : ' - Search: ' + preview;
+    ircexport += ' - TO: (Pay: ' + hit.to.pay + ') (Fair: ' + hit.to.fair + ') (Comm: ' + hit.to.comm + ') (Fast: ' + hit.to.fast + ')';
+
+    _clip(ircexport);
+    alert('IRC export has been copied to your clipboard.');
+
+  }).fail(function () {
+    alert('Failed to shorten links.');
+  });
+}
+
 function _clip (text) {
+  console.log(text);
   var input = document.createElement('textarea');
   input.style.opacity = 0;
   input.value = text;
@@ -173,4 +200,5 @@ function _clip (text) {
   input.select();
   document.execCommand('Copy');
   document.body.removeChild(input);
+  console.log('copied');
 }
