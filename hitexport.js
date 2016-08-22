@@ -100,7 +100,6 @@ if ($hits.length) {
   
   $('body').on('click', '.vb', function () {
   _export_vb($(this).data('key'));
-  alert('adadad');
 });
   
 }
