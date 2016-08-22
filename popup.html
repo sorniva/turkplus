@@ -178,9 +178,22 @@
       <div class="navi navi-all col-xs-10 col-xs-offset-2 main hidden" style="font-size: 12px;">
         <div class="row">
           <div class="col-xs-6">
-            <h3 class="page-header">Today's HITs - All</h3>
+            <h3 class="page-header">Today's HITs - <span id="show">All</span></h3>
           </div>
           <div class="col-xs-6">
+            <div class="dropdown pull-left">
+              <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Show HITs
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdown">
+                <li><a class="hitsall" href="#">All</a></li>
+                <li><a class="hitsrej" href="#">Rejected</a></li>
+                <li><a class="hitsapp" href="#">Approved/Paid</a></li>
+                <li><a class="hitspen" href="#">Pending/Submitted</a></li>
+                <li><a class="hitsvie" href="#">Previewed/Accepted</a></li>
+              </ul>
+            </div>
             <button type="button" class="btn btn-primary btn-xs pull-right sync-todays">Sync</button>
           </div>
         </div>

@@ -49,6 +49,36 @@ $('html').on('click', '.export-todays', function() {
   _clip(tpeexport);
 });
 
+$('html').on('click', '.hitsall', function() {
+  $('#show').text('All');
+  $('.all').removeClass('hidden');
+});
+
+$('html').on('click', '.hitsrej', function() {
+  $('#show').text('Rejected');
+  $('.all').addClass('hidden');
+  $('.rej').removeClass('hidden');
+});
+
+$('html').on('click', '.hitsapp', function() {
+  $('#show').text('Approved/Paid');
+  $('.all').addClass('hidden');
+  $('.app').removeClass('hidden');
+});
+
+$('html').on('click', '.hitspen', function() {
+  $('#show').text('Pending/Submitted');
+  $('.all').addClass('hidden');
+  $('.pen').removeClass('hidden');
+});
+
+$('html').on('click', '.hitsvie', function() {
+  $('#show').text('Accepted/Viewed');
+  $('.all').addClass('hidden');
+  $('.vie').removeClass('hidden');
+});
+
+
 
 function _tpe () {
   var html1 = '', html2 = '', c1 = 0, c2 = 0, tpe = 0;
@@ -85,16 +115,19 @@ function _tpe () {
     });
 
     for (var i = 0; i < s1.length; i ++) {
-      var k1 = s1[i], color = '', source = '', autoapp = '', pend = false;
+      var k1 = s1[i], color = '', source = '', autoapp = '', pend = false, status = 'all ';
       
       if (h1[k1].status.match(/Paid|Approved/)) {
-        color = 'green';
+        color = 'green'; status += 'pai';
       }
       else if (h1[k1].status.match(/Pending|Submitted/)) {
-        color = 'orange'; pend = true;
+        color = 'orange'; pend = true; status += 'pen';
       }
       else if (h1[k1].status.match(/Rejected/)) {
-        color = 'red';
+        color = 'red'; status += 'rej';
+      }
+      else if (h1[k1].status.match(/Accepted|Previewed/)) {
+        status += 'vie';
       }
       if (h1[k1].source) {
         source = '<a href="' + h1[k1].source + '" target="_blank" style="text-decoration: none;"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a> ';
@@ -109,7 +142,7 @@ function _tpe () {
       }
       
      html1 +=
-      '<tr>' +
+      '<tr class="' + status + '">' +
         '  <td><div>' + source + h1[k1].reqname +'</div></td>' +
         '  <td>' + h1[k1].title + '</td>' +
         '  <td style="width: 70px;">' + h1[k1].reward + '</td>' +
