@@ -92,9 +92,9 @@ for (var i = 0; i < $hits.length; i ++) {
   to.push([key, req_id]);
 
 
-  $hit.find('a.capsulelink').after(
-    '<button class="vb" data-key="' + key + '" type="button" style="background-color: transparent; border: solid 1px #000000; margin-left: 5px;">vB</button>' +
-    '<button class="irc" data-key="' + key + '" type="button" style="background-color: transparent; border: solid 1px #000000; margin-left: 5px;">IRC</button>'
+  $hit.find('a.capsulelink').before(
+    '<button class="vb" data-key="' + key + '" type="button" style="background-color: transparent; border: solid 1px #000000; margin-right: 5px;">vB</button>' +
+    '<button class="irc" data-key="' + key + '" type="button" style="background-color: transparent; border: solid 1px #000000; margin-right: 5px;">IRC</button>'
   );
 }
 if ($hits.length) {
