@@ -228,8 +228,7 @@ function _time_til_aa (aa, sub) {
 }
 
 function _clip (text) {
-  var input = document.createElement('input');
-  //input.style.position = 'fixed';
+  var input = document.createElement('textarea');
   input.style.opacity = 0;
   input.value = text;
   document.body.appendChild(input);
