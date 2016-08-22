@@ -51,30 +51,30 @@ $('html').on('click', '.export-todays', function() {
 
 $('html').on('click', '.hitsall', function() {
   $('#show').text('All');
-  $('.all').removeClass('hidden');
+  $('.allhits').removeClass('hidden');
 });
 
 $('html').on('click', '.hitsrej', function() {
   $('#show').text('Rejected');
-  $('.all').addClass('hidden');
+  $('.allhits').addClass('hidden');
   $('.rej').removeClass('hidden');
 });
 
 $('html').on('click', '.hitsapp', function() {
   $('#show').text('Approved/Paid');
-  $('.all').addClass('hidden');
+  $('.allhits').addClass('hidden');
   $('.app').removeClass('hidden');
 });
 
 $('html').on('click', '.hitspen', function() {
   $('#show').text('Pending/Submitted');
-  $('.all').addClass('hidden');
+  $('.allhits').addClass('hidden');
   $('.pen').removeClass('hidden');
 });
 
 $('html').on('click', '.hitsvie', function() {
   $('#show').text('Accepted/Viewed');
-  $('.all').addClass('hidden');
+  $('.allhits').addClass('hidden');
   $('.vie').removeClass('hidden');
 });
 
@@ -115,7 +115,7 @@ function _tpe () {
     });
 
     for (var i = 0; i < s1.length; i ++) {
-      var k1 = s1[i], color = '', source = '', autoapp = '', pend = false, status = 'all ';
+      var k1 = s1[i], color = '', source = '', autoapp = '', pend = false, status = 'allhits ';
       
       if (h1[k1].status.match(/Paid|Approved/)) {
         color = 'green'; status += 'app';
