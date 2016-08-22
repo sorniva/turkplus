@@ -118,7 +118,7 @@ function _tpe () {
       var k1 = s1[i], color = '', source = '', autoapp = '', pend = false, status = 'all ';
       
       if (h1[k1].status.match(/Paid|Approved/)) {
-        color = 'green'; status += 'pai';
+        color = 'green'; status += 'app';
       }
       else if (h1[k1].status.match(/Pending|Submitted/)) {
         color = 'orange'; pend = true; status += 'pen';
