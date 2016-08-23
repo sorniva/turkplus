@@ -47,6 +47,9 @@ chrome.storage.local.get('__hits', function (data) {
       _status_detail(sender.id);
       sendResponse({msg: 'Syncing now!'});
     }
+    if (request.msg == 'sync_quals') {
+      _sync_quals(sender.id);
+    }
   });
     
 });
@@ -170,6 +173,63 @@ function _status_detail (tab) {
         _update_tpe();
       }
     });
+  }
+}
+
+// Sync qualifications
+function _sync_quals (tab) {
+  var __quals = {};
+
+  _scrape(1);
+  function _scrape (_page) {
+    $.get('https://www.mturk.com/mturk/viewquals?pageNumber=' + _page + '&searchSpec=QualsSearch%23T%231%2310%23-1%23T%23%21only_include_earned_qualifications%210%21rO0ABXQABHRydWU-%21%23%21Name%210%21%23%21', function (data) {
+	//$.get(_url, function (data) {
+	  var _ = $(data);
+	  var pre = _.find('td[class="error_title"]:contains(You have exceeded the maximum allowed page request rate for this website.)').length;
+	  var $quals = _.find('a.capsulelink').parents('tr').parents('tr').parents('tr');
+
+	  if ($quals.length) {
+		var url = _.find('a:contains(Next)').eq(0).prop('href');
+		var page, $page = _.find('a:contains(Next)').eq(0);
+		if ($page.length) { page = $page.prop('href').split('Number=')[1].split('&')[0].trim(); }
+		var last, $last = _.find('a:contains(Last)').eq(0);
+		if ($last.length) { last = $last.prop('href').split('Number=')[1].split('&')[0].trim(); }
+
+		for (var i = 0; i < $quals.length; i ++) {
+		  var id          = $quals.eq(i).find('a[id^="requestQualLink"]').prop('href').split('=')[1].trim();
+		  var title       = $quals.eq(i).find('a.capsulelink').text().trim();
+		  var author      = $quals.eq(i).find('td.capsule_field_title:contains(Author:)').next().text().trim();
+		  var value       = $quals.eq(i).find('td.capsule_field_title:contains(Value:)').next().text().trim();
+		  var description = $quals.eq(i).find('td.capsule_field_title:contains(Description:)').next().text().trim();
+		  var assigned    = $quals.eq(i).find('td.capsule_field_title:contains(Assigned:)').next().text().trim();
+		  var retake      = $quals.eq(i).find('td.capsule_field_title:contains(date:)').next().text().trim();
+
+		  if (!__quals[id]) {
+			__quals[id] = {
+			  id          : id,
+			  title       : title,
+			  author      : author,
+			  value       : value,
+			  description : description,
+			  assigned    : assigned,
+			  retake      : retake
+			};
+		  }
+		}
+		if (url) {
+          _scrape(page);
+		  chrome.runtime.sendMessage(tab, {msg: 'sync_quals_status', data: 'Synced page ' + _page + ' of ' + last}); 
+		}
+		else {
+		  chrome.storage.local.set({'__quals': __quals});
+  		  chrome.runtime.sendMessage(tab, {msg: 'sync_quals_status', data: 'Done syncing'}); 
+        }
+      }
+	  else if (pre) {
+        console.log('pre');
+		setTimeout(function () { _scrape(_url, _page); }, 2000);
+	  }
+	});
   }
 }
 

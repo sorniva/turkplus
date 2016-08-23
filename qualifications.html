@@ -1,0 +1,65 @@
+<!doctype html>
+<html style="width: 800px; height: 500px; overflow-x: hidden; background-color: #333; color: #FFF;">
+  <head>
+    <meta charset="utf-8">
+    <title>TurkPlus</title>
+    <!-- Scripts -->
+    <script src="js/jquery-3.1.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="qualifications.js"></script>
+    <!-- Cascading Style Sheets -->
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="css/dashboard.css" rel="stylesheet" media="screen">
+  </head>
+  <body style="background-color: #333; color: #FFF;">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">TurkPlus</a>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-2 sidebar" style="background-color: #222;">
+          <ul class="nav nav-sidebar">
+            <li>General</li>
+            <li><a href="/dashboard.html">Dashboard</a>
+            <li class="active"><a href="/qualifications.html">Qualifications</a>
+            </li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li>Today's HITs</li>
+            <li><a href="/todaysall.html">All</a></li>
+            <li><a href="/todaysbreakdown.html">Breakdown</a></li>
+          </ul>
+        </div>
+        <div class="col-xs-10 col-xs-offset-2 main" style="font-size: 12px;">
+          <div class="row">
+            <div class="col-xs-6">
+              <h3 class="page-header">Qualifications 
+                <span id="count" style="font-size: 50%;"></span>
+              </h3>
+            </div>
+            <div class="col-xs-6 pull-right" style="text-align: right;">
+                <button id="qualsync" type="button" class="btn btn-primary btn-xs">Sync</button>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th style="width: 70px;">Assigned</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th style="width: 70px;">Value</th>
+                  </tr>
+                </thead>
+              <tbody id="tbody"><tr><th>Done</th></tr></tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

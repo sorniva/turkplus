@@ -112,3 +112,9 @@ body {
 .table {
     margin-bottom: 0px;
 }
+
+.table:not(.table-normal) {
+  max-width: none;
+  table-layout: fixed;
+  word-wrap: break-word;
+}

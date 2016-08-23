@@ -1,0 +1,180 @@
+<!doctype html>
+<html style="width: 800px; height: 500px; overflow-x: hidden; background-color: #333; color: #FFF;">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>TurkPlus</title>
+
+    <!-- Scripts -->
+    <script src="js/jquery-3.1.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="dashboard.js"></script>
+
+    <!-- Cascading Style Sheets -->
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="css/dashboard.css" rel="stylesheet" media="screen">
+  </head>
+
+  <body style="background-color: #333; color: #FFF;">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">TurkPlus</a>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-2 sidebar" style="background-color: #222;">
+          <ul class="nav nav-sidebar">
+            <li>General</li>
+            <li class="active"><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/qualifications.html">Qualifications</a>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li>Today's HITs</li>
+            <li><a href="/todaysall.html">All</a></li>
+            <li><a href="/todaysbreakdown.html">Breakdown</a></li>
+          </ul>
+        </div>
+
+        <div class="navi navi-dashboard col-xs-10 col-xs-offset-2 main" style="font-size: 12px;">
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="thumbnail">
+                <!-- Total Earnings -->
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Earnings To Date</th>
+                      <th style="width: 80px; text-align: center;">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Approved HITs</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                    </tr>
+                    <tr>
+                      <td>Bonuses</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                    </tr>
+                    <tr>
+                      <td>Total</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                    </tr>
+                    <tr>
+                      <td>Available for Transfer</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- Total Earnings -->
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="thumbnail">
+                <!-- HIT Totals -->
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Submitted</th>
+                      <th style="width: 80px; text-align: center;">Value</th>
+                      <th style="width: 80px; text-align: center;">Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Total</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td style="width: 80px; text-align: right;">—</td>
+                    </tr>
+                    <tr>
+                      <td>Approved</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                    </tr>
+                    <tr>
+                      <td>Rejected</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                    </tr>
+                    <tr>
+                      <td>Pending </td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td style="width: 80px; text-align: right;">—</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- HIT Totals -->
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="thumbnail">
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th style="width: 80px; text-align: center;">Submitted</th>
+                      <th style="width: 80px; text-align: center;">Approved</th>
+                      <th style="width: 80px; text-align: center;">Rejected</th>
+                      <th style="width: 80px; text-align: center;">Pending</th>
+                      <th style="width: 80px; text-align: center;">Eanrings</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="dash">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                    </tr>
+                    <tr>
+                      <td class="dash">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                    </tr>
+                    <tr>
+                      <td class="dash">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                    </tr>
+                    <tr>
+                      <td class="dash">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                    </tr>
+                    <tr>
+                      <td class="dash">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">-</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                      <td class="dash" style="width: 80px; text-align: right;">—</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+
+</html>
