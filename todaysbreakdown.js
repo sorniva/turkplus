@@ -3,9 +3,9 @@ var tpeexport = '';
 
 chrome.storage.onChanged.addListener( function (changes) {
   for (var key in changes) {
-    if (key === 'dash_popup') {
-      _dashboard();
-      console.log('saved!');
+    if (key === 'tpe') {
+      var new_tpe = changes[key].newValue;
+      $('#tpe').text('$' + new_tpe.toFixed(2));
     }
   }
 });
@@ -19,11 +19,14 @@ chrome.runtime.onMessage.addListener( function (request, sender, sendResponse) {
     _tpe();
     sendResponse({msg: 'Update received!'});
   }
+  if (key === 'tpe') {
+    var new_tpe = changes[key].newValue;
+    $('#tpe').text('$' + new_tpe.toFixed(2));
+  }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  _dashboard();
-  _get_dashboard();
+  _get_tpe();
 });
 
 _tpe();
@@ -78,7 +81,12 @@ $('html').on('click', '.hitsvie', function() {
   $('.vie').removeClass('hidden');
 });
 
-
+function _get_tpe () {
+  chrome.storage.local.get('tpe', function (data) {
+    var stored = data.tpe || 0;
+    $('#tpe').text('$' + stored.toFixed(2));
+  });
+}
 
 function _tpe () {
   var html1 = '', html2 = '', c1 = 0, c2 = 0, tpe = 0;

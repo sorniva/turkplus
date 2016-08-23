@@ -5,13 +5,25 @@ chrome.storage.onChanged.addListener( function (changes) {
     if (key === 'dash_popup') {
       _dashboard();
     }
+    if (key === 'tpe') {
+      var new_tpe = changes[key].newValue;
+      $('#tpe').text('$' + new_tpe.toFixed(2));
+    }
   }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+  _get_tpe();
   _dashboard();
   _get_dashboard();
 });
+
+function _get_tpe () {
+  chrome.storage.local.get('tpe', function (data) {
+    var stored = data.tpe || 0;
+    $('#tpe').text('$' + stored.toFixed(2));
+  });
+}
 
 function _dashboard () {
   chrome.storage.local.get('dash_popup', function (data) {

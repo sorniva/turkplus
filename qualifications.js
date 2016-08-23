@@ -3,6 +3,10 @@ chrome.storage.onChanged.addListener( function (changes) {
     if (key === '__quals') {
       _show_quals();
     }
+    if (key === 'tpe') {
+      var new_tpe = changes[key].newValue;
+      $('#tpe').text('$' + new_tpe.toFixed(2));
+    }
   }
 });
 
@@ -11,6 +15,7 @@ chrome.runtime.onMessage.addListener( function (request) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+  _get_tpe();
   _show_quals();
   _get_number();
 });
@@ -19,6 +24,13 @@ $('html').on('click', '#qualsync', function() {
   chrome.runtime.sendMessage({msg: 'sync_quals'});
   $('#tbody').html('<tr><th>Syncing...</th></tr>');
 });
+
+function _get_tpe () {
+  chrome.storage.local.get('tpe', function (data) {
+    var stored = data.tpe || 0;
+    $('#tpe').text('$' + stored.toFixed(2));
+  });
+}
 
 function _status (status) {
   var html = '<tr><th>' + status + '</th></tr>';
