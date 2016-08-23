@@ -152,9 +152,10 @@ function _export_vb (key) {
   else if (fast > 2.99) { _fast = '#B3B300'; }
   else if (fast > 1.99) { _fast = '#B37400'; }
 
-  var exportcode = '[table][tr][td]'+
-	  '[b]Title:[/b] [URL=' + hit.prevlink + ']' + hit.title + '[/URL] | [URL=' + hit.pandlink + ']PANDA[/URL]\n' +
-	  '[b]Requester:[/b] [URL=' + hit.reqlink + ']' + hit.reqname + '[/URL] [' + hit.reqid + '] ([URL=' + hit.conlink + ']Contact[/URL])\n' +
+  var exportcode = 
+      '[table][tr][td]'+
+      '[b]Title:[/b] [URL=' + hit.prevlink + ']' + hit.title + '[/URL] | [URL=' + hit.pandlink + ']PANDA[/URL]\n' +
+      '[b]Requester:[/b] [URL=' + hit.reqlink + ']' + hit.reqname + '[/URL] [' + hit.reqid + '] ([URL=' + hit.conlink + ']Contact[/URL])\n' +
 	  '([URL='+hit.tolink+']TO[/URL]):'+
 	  '[b] \[Pay: [COLOR=' + _pay + ']' + pay + '[/COLOR]\][/b]'+
 	  '[b] \[Fair: [COLOR=' + _fair + ']' + fair + '[/COLOR]\][/b]' +
@@ -165,7 +166,8 @@ function _export_vb (key) {
 	  '[b]HITs Available:[/b] ' + hit.avail + '\n' +
 	  '[b]Reward:[/b] [COLOR=green][b] ' + hit.reward + '[/b][/COLOR]\n' +
 	  '[b]Qualifications:[/b] ' + hit.quals + '\n' +
-	  '[/td][/tr][/table]';
+	  '[/td][/tr][/table]'
+  ;
 
   _copyToClip(exportcode);
   alert('Forum export has been copied to your clipboard.');
